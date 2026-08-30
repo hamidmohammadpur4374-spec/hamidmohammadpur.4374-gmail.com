@@ -48,7 +48,6 @@ jobs:
           test -s admin-v2.html
           test -s apple-touch-icon.png
           test -s qa/package.json
-          test -s qa/package-lock.json
           test -s qa/playwright.config.mjs
           grep -q 'catalog-pro-v8.js' catalog/index.html
           grep -q 'product-pro-v7.js' catalog/product.html
@@ -66,12 +65,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
-          cache-dependency-path: qa/package-lock.json
 
       - name: Install QA dependencies
         working-directory: qa
-        run: npm ci --no-audit --no-fund
+        run: npm install --no-audit --no-fund
 
       - name: Install Playwright browsers
         working-directory: qa
