@@ -1,0 +1,12 @@
+{
+  "name": "modland-qa",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:live": "playwright test tests/live.spec.mjs --project=chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}
