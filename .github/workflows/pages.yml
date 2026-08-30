@@ -1,4 +1,4 @@
-name: Deploy MODLAND Admin to GitHub Pages
+name: Deploy MODLAND to GitHub Pages
 
 on:
   push:
@@ -23,6 +23,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Validate static app
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check catalog/catalog-pro-v8.js
+          node --check catalog/product-pro-v7.js
+          node --check admin-pro-core.js
+          node --check admin-pro-products.js
+          node --check admin-pro-admin.js
+          node --check admin-vnext.js
+          node --check admin-pro-v2.js
+          node --check catalog/sw.js
+          node --check sw.js
+          test -s catalog/index.html
+          test -s catalog/product.html
+          test -s admin-v2.html
+          test -s apple-touch-icon.png
+          grep -q 'catalog-pro-v8.js' catalog/index.html
+          grep -q 'product-pro-v7.js' catalog/product.html
+          grep -q 'admin-pro-v2.js' admin-v2.html
+          grep -q 'Content-Security-Policy' admin-v2.html
+          python -m json.tool catalog/manifest.webmanifest >/dev/null
+          python -m json.tool manifest.webmanifest >/dev/null
+          if grep -q '<script>' catalog/index.html catalog/product.html admin-v2.html; then echo 'Inline script blocked by CSP'; exit 1; fi
+          grep -q "script-src 'self'" catalog/index.html
+          grep -q "script-src 'self'" catalog/product.html
+          grep -q "script-src 'self'" admin-v2.html
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
