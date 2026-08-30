@@ -1,5 +1,5 @@
-const C='modland-admin-v8';
-const A=['./admin-v2.html','./admin-pro-v1.css','./admin-pro-core.js','./admin-pro-products.js','./admin-pro-admin.js','./admin-vnext.js','./manifest.webmanifest','./icon.svg'];
+const C='modland-admin-v9';
+const A=['./admin-v2.html','./admin-pro-v1.css','./admin-pro-core.js','./admin-pro-products.js','./admin-pro-admin.js','./admin-vnext.js','./manifest.webmanifest','./icon.svg','./apple-touch-icon.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(A)));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x.startsWith('modland-admin-')&&x!==C).map(x=>caches.delete(x)))));self.clients.claim()});
 self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(u.pathname.includes('/catalog/'))return;if(u.hostname==='bemkwibdtjrvrstlmvca.supabase.co')return;if(e.request.mode==='navigate'){e.respondWith(fetch(e.request,{cache:'no-store'}).catch(()=>caches.match('./admin-v2.html')));return}e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{if(res.ok&&e.request.method==='GET'){const copy=res.clone();caches.open(C).then(c=>c.put(e.request,copy))}return res}))) });
