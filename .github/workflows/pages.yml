@@ -20,9 +20,11 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Validate static app
         shell: bash
         run: |
@@ -37,28 +39,72 @@ jobs:
           node --check admin-ui-v3.js
           node --check catalog/sw.js
           node --check sw.js
+          node --check qa/tests/mock.mjs
+          node --check qa/tests/customer.spec.mjs
+          node --check qa/tests/admin.spec.mjs
+          node --check qa/tests/live.spec.mjs
           test -s catalog/index.html
           test -s catalog/product.html
           test -s admin-v2.html
           test -s apple-touch-icon.png
+          test -s qa/package.json
+          test -s qa/playwright.config.mjs
           grep -q 'catalog-pro-v8.js' catalog/index.html
           grep -q 'product-pro-v7.js' catalog/product.html
           grep -q 'admin-ui-v3.js' admin-v2.html
           grep -q 'Content-Security-Policy' admin-v2.html
           python -m json.tool catalog/manifest.webmanifest >/dev/null
           python -m json.tool manifest.webmanifest >/dev/null
+          python -m json.tool qa/package.json >/dev/null
           if grep -q '<script>' catalog/index.html catalog/product.html admin-v2.html; then echo 'Inline script blocked by CSP'; exit 1; fi
           grep -q "script-src 'self'" catalog/index.html
           grep -q "script-src 'self'" catalog/product.html
           grep -q "script-src 'self'" admin-v2.html
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install QA dependencies
+        working-directory: qa
+        run: npm install --no-audit --no-fund
+
+      - name: Install Playwright browsers
+        working-directory: qa
+        run: npx playwright install --with-deps chromium webkit
+
+      - name: Browser regression gate
+        working-directory: qa
+        run: npm test
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
           enablement: true
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Production smoke test
+        working-directory: qa
+        env:
+          QA_BASE_URL: https://hamidmohammadpur4374-spec.github.io/hamidmohammadpur.4374-gmail.com
+        run: npm run test:live
+
+      - name: Upload QA diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: modland-qa-failure-${{ github.run_number }}
+          path: |
+            qa/qa-report
+            qa/test-results
+          if-no-files-found: ignore
+          retention-days: 7
