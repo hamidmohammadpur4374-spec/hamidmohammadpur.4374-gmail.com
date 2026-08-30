@@ -1,4 +1,4 @@
-const C='modland-customer-v6';
+const C='modland-customer-v7';
 const S=['./','./index.html','./product.html','./catalog-pro-v6.css','./catalog-pro-v6.js','./product-pro-v6.css','./product-pro-v6.js','./manifest.webmanifest','../icon.svg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(S)));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x.startsWith('modland-customer-')&&x!==C).map(x=>caches.delete(x)))));self.clients.claim()});
