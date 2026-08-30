@@ -39,6 +39,7 @@ jobs:
           node --check admin-ui-v3.js
           node --check catalog/sw.js
           node --check sw.js
+          node --check qa/db-integrity.mjs
           node --check qa/tests/mock.mjs
           node --check qa/tests/customer.spec.mjs
           node --check qa/tests/admin.spec.mjs
@@ -65,6 +66,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+
+      - name: Supabase snapshot integrity gate
+        run: node qa/db-integrity.mjs
 
       - name: Install QA dependencies
         working-directory: qa
