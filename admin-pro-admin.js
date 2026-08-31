@@ -19,4 +19,4 @@ $('#loginForm').onsubmit=async e=>{e.preventDefault();const b=$('#loginBtn');b.d
 async function showApp(){$('#login').classList.add('hide');$('#app').classList.remove('hide');$('#who').textContent=session.user?.email||'';await loadData()}
 $('#logout').onclick=async()=>{try{if(session?.access_token)await fetch(BASE+'/auth/v1/logout',{method:'POST',headers:headers(false)})}catch{}saveSession(null);location.reload()};
 (async()=>{await ensureSession();if(session&&await isAdmin())await showApp();else{$('#login').classList.remove('hide');$('#app').classList.add('hide')}})();
-if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js?v=12',{scope:'./',updateViaCache:'none'}).catch(()=>{});
