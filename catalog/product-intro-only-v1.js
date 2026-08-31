@@ -16,6 +16,7 @@ function removeOrderUi(){
     infoPanel.querySelectorAll('.meta .tag').forEach(x=>{if(ORDER_WORDS.test((x.textContent||'').trim()))x.remove()});
     infoPanel.querySelectorAll('.txt').forEach(x=>{if(ORDER_WORDS.test((x.textContent||'').trim()))x.remove()});
   }
+  document.querySelectorAll('.features li').forEach(x=>{if(ORDER_WORDS.test((x.textContent||'').trim()))x.remove()});
   document.querySelectorAll('#root a,#root button').forEach(x=>{if(ORDER_WORDS.test((x.textContent||'').trim()))x.remove()});
   staticSizes();
 }
