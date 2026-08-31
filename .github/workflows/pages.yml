@@ -32,6 +32,7 @@ jobs:
           node --check catalog/catalog-pro-v9.js
           node --check catalog/product-pro-v8.js
           node --check catalog/product-intro-only-v1.js
+          node --check catalog/free-shipping-v1.js
           node --check admin-pro-core.js
           node --check admin-pro-products.js
           node --check admin-pro-admin.js
@@ -49,13 +50,16 @@ jobs:
           test -s catalog/index.html
           test -s catalog/product.html
           test -s catalog/product-intro-only-v1.js
+          test -s catalog/free-shipping-v1.js
           test -s admin-v2.html
           test -s apple-touch-icon.png
           test -s qa/package.json
           test -s qa/playwright.config.mjs
           grep -q 'catalog-pro-v9.js' catalog/index.html
+          grep -q 'free-shipping-v1.js' catalog/index.html
           grep -q 'product-pro-v8.js' catalog/product.html
           grep -q 'product-intro-only-v1.js' catalog/product.html
+          grep -q 'free-shipping-v1.js' catalog/product.html
           grep -q 'admin-ui-v3.js' admin-v2.html
           grep -q 'admin-catalog-only-v1.js' admin-v2.html
           grep -q 'Content-Security-Policy' admin-v2.html
