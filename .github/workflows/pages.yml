@@ -53,18 +53,21 @@ jobs:
           test -s apple-touch-icon.png
           test -s qa/package.json
           test -s qa/playwright.config.mjs
+          test ! -e admin-catalog-only-v2.js
           grep -q 'catalog-pro-v9.js' catalog/index.html
           grep -q 'catalog-policy-v2.js' catalog/index.html
-          grep -q 'product-pro-v8.js' catalog/product.html
+          grep -q 'product-pro-v8.js?v=18' catalog/product.html
           grep -q 'catalog-policy-v2.js' catalog/product.html
           grep -q 'admin-ui-v3.js' admin-v2.html
           grep -q 'admin-catalog-only-v1.js' admin-v2.html
           grep -q 'Content-Security-Policy' admin-v2.html
-          grep -q "modland-customer-v17" catalog/sw.js
+          grep -q "modland-customer-v18" catalog/sw.js
+          grep -q "product-pro-v8.js?v=18" catalog/sw.js
           grep -q "catalog-policy-v2.js?v=17" catalog/sw.js
           grep -q "modland-admin-v14" sw.js
           grep -q "serviceWorker.register('./sw.js?v=12'" admin-pro-admin.js
           grep -q "serviceWorker.register('./sw.js?v=12'" admin-ui-v3.js
+          if grep -Eq 'stock_status|stock_note|shipping_text|order_button|order_message|data-size' catalog/product-pro-v8.js; then echo 'Legacy ordering/inventory UI leaked into product runtime'; exit 1; fi
           python -m json.tool catalog/manifest.webmanifest >/dev/null
           python -m json.tool manifest.webmanifest >/dev/null
           python -m json.tool qa/package.json >/dev/null
@@ -103,6 +106,7 @@ jobs:
           cp -a catalog _site/catalog
           test ! -e _site/qa
           test ! -e _site/node_modules
+          test ! -e _site/admin-catalog-only-v2.js
           test -s _site/catalog/index.html
           test -s _site/admin-v2.html
           test -s _site/admin-catalog-only-v1.js
