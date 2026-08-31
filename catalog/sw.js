@@ -1,5 +1,5 @@
-const C='modland-customer-v15',IMG='modland-customer-images-v1',MAX_IMAGES=100;
-const S=['./','./index.html','./product.html','./catalog-pro-v6.css?v=15','./catalog-vnext.css?v=15','./catalog-platform-v2.css?v=15','./catalog-pro-v9.js?v=15','./product-pro-v6.css?v=15','./product-pro-v8.js?v=15','./product-intro-only-v1.js?v=15','./free-shipping-v1.js?v=15','./manifest.webmanifest','../icon.svg','../apple-touch-icon.png'];
+const C='modland-customer-v16',IMG='modland-customer-images-v1',MAX_IMAGES=100;
+const S=['./','./index.html','./product.html','./catalog-pro-v6.css?v=15','./catalog-vnext.css?v=15','./catalog-platform-v2.css?v=15','./catalog-pro-v9.js?v=15','./product-pro-v6.css?v=15','./product-pro-v8.js?v=15','./product-intro-only-v1.js?v=15','./free-shipping-v1.js?v=16','./manifest.webmanifest','../icon.svg','../apple-touch-icon.png'];
 async function trim(cacheName,max){const c=await caches.open(cacheName),keys=await c.keys();if(keys.length>max)await Promise.all(keys.slice(0,keys.length-max).map(k=>c.delete(k)))}
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(S)));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(x=>x.startsWith('modland-customer-')&&x!==C&&x!==IMG).map(x=>caches.delete(x)))));self.clients.claim()});
