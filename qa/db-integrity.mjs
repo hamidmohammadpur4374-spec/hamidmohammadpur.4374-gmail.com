@@ -1,5 +1,6 @@
 const BASE='https://bemkwibdtjrvrstlmvca.supabase.co';
 const KEY='sb_publishable_oqpsHvl6ty2aYmAkxwfwfw_pjsN8a6p';
+const FREE_SHIPPING='ارسال رایگان به سراسر کشور';
 
 function fail(message){throw new Error('[DB integrity] '+message)}
 function arr(v,name){if(!Array.isArray(v))fail(name+' must be an array');return v}
@@ -27,6 +28,7 @@ const media=arr(s.media,'media');
 if(!s.collections||typeof s.collections!=='object')fail('collections are missing');
 
 if(Object.prototype.hasOwnProperty.call(s.store,'order_id'))fail('order_id leaked in public store snapshot');
+if(String(s.store.footer_note||'').trim()!==FREE_SHIPPING)fail('global free shipping message is missing or changed');
 const forbiddenProductFields=['order_button','order_message','shipping_text','stock_note','stock_status'];
 const productIds=new Set();
 const codes=new Set();
@@ -41,7 +43,7 @@ for(const p of products){
   for(const field of forbiddenProductFields){
     if(Object.prototype.hasOwnProperty.call(p,field))fail('ordering field '+field+' leaked on product '+code);
   }
-  if(/ثبت\s*سفارش|سفارش محصول|ارسال\s*رایگان|پیام بدهید/i.test(JSON.stringify(p)))fail('ordering language leaked on product '+code);
+  if(/ثبت\s*سفارش|سفارش محصول|پیام بدهید/i.test(JSON.stringify(p)))fail('ordering language leaked on product '+code);
 }
 
 const categoryIds=new Set(categories.map(c=>c?.id).filter(Boolean));
@@ -77,6 +79,7 @@ if(serialized.includes('original_storage_path'))fail('private storage field name
 
 console.log(JSON.stringify({
   ok:true,
+  freeShipping:s.store.footer_note,
   products:products.length,
   categories:categories.length,
   media:media.length,
