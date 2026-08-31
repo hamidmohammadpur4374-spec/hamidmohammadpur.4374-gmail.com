@@ -41,6 +41,7 @@ for(const p of products){
   for(const field of forbiddenProductFields){
     if(Object.prototype.hasOwnProperty.call(p,field))fail('ordering field '+field+' leaked on product '+code);
   }
+  if(/ثبت\s*سفارش|سفارش محصول|ارسال\s*رایگان|پیام بدهید/i.test(JSON.stringify(p)))fail('ordering language leaked on product '+code);
 }
 
 const categoryIds=new Set(categories.map(c=>c?.id).filter(Boolean));
