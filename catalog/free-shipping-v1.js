@@ -14,6 +14,15 @@ function applyFreeShipping(){
 }
 let queued=false;
 function schedule(){if(queued)return;queued=true;queueMicrotask(()=>{queued=false;applyFreeShipping()})}
-function boot(){applyFreeShipping();const target=document.querySelector('.shell')||document.body;if(target)new MutationObserver(schedule).observe(target,{childList:true,subtree:true,characterData:true})}
+function boot(){
+  applyFreeShipping();
+  const target=document.querySelector('.shell')||document.body;
+  if(target)new MutationObserver(schedule).observe(target,{childList:true,subtree:true,characterData:true});
+  let ticks=0;
+  const guard=setInterval(()=>{applyFreeShipping();if(++ticks>=40)clearInterval(guard)},250);
+  window.addEventListener('pageshow',applyFreeShipping);
+  window.addEventListener('online',applyFreeShipping);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)applyFreeShipping()});
+}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
