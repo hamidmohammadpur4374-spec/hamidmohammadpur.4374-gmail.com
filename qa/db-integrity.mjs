@@ -26,6 +26,8 @@ const products=arr(s.products,'products');
 const media=arr(s.media,'media');
 if(!s.collections||typeof s.collections!=='object')fail('collections are missing');
 
+if(Object.prototype.hasOwnProperty.call(s.store,'order_id'))fail('order_id leaked in public store snapshot');
+const forbiddenProductFields=['order_button','order_message','shipping_text','stock_note','stock_status'];
 const productIds=new Set();
 const codes=new Set();
 for(const p of products){
@@ -36,6 +38,9 @@ for(const p of products){
   if(!code)fail('product without code: '+p.id);
   if(codes.has(code))fail('duplicate product code '+code);
   codes.add(code);
+  for(const field of forbiddenProductFields){
+    if(Object.prototype.hasOwnProperty.call(p,field))fail('ordering field '+field+' leaked on product '+code);
+  }
 }
 
 const categoryIds=new Set(categories.map(c=>c?.id).filter(Boolean));
