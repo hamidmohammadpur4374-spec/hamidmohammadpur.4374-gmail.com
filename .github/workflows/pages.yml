@@ -31,8 +31,7 @@ jobs:
           set -euo pipefail
           node --check catalog/catalog-pro-v9.js
           node --check catalog/product-pro-v8.js
-          node --check catalog/product-intro-only-v1.js
-          node --check catalog/free-shipping-v1.js
+          node --check catalog/catalog-policy-v2.js
           node --check admin-pro-core.js
           node --check admin-pro-products.js
           node --check admin-pro-admin.js
@@ -49,20 +48,23 @@ jobs:
           node --check qa/tests/live.spec.mjs
           test -s catalog/index.html
           test -s catalog/product.html
-          test -s catalog/product-intro-only-v1.js
-          test -s catalog/free-shipping-v1.js
+          test -s catalog/catalog-policy-v2.js
           test -s admin-v2.html
           test -s apple-touch-icon.png
           test -s qa/package.json
           test -s qa/playwright.config.mjs
           grep -q 'catalog-pro-v9.js' catalog/index.html
-          grep -q 'free-shipping-v1.js' catalog/index.html
+          grep -q 'catalog-policy-v2.js' catalog/index.html
           grep -q 'product-pro-v8.js' catalog/product.html
-          grep -q 'product-intro-only-v1.js' catalog/product.html
-          grep -q 'free-shipping-v1.js' catalog/product.html
+          grep -q 'catalog-policy-v2.js' catalog/product.html
           grep -q 'admin-ui-v3.js' admin-v2.html
           grep -q 'admin-catalog-only-v1.js' admin-v2.html
           grep -q 'Content-Security-Policy' admin-v2.html
+          grep -q "modland-customer-v17" catalog/sw.js
+          grep -q "catalog-policy-v2.js?v=17" catalog/sw.js
+          grep -q "modland-admin-v14" sw.js
+          grep -q "serviceWorker.register('./sw.js?v=12'" admin-pro-admin.js
+          grep -q "serviceWorker.register('./sw.js?v=12'" admin-ui-v3.js
           python -m json.tool catalog/manifest.webmanifest >/dev/null
           python -m json.tool manifest.webmanifest >/dev/null
           python -m json.tool qa/package.json >/dev/null
