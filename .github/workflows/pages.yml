@@ -61,10 +61,22 @@ jobs:
           grep -q 'admin-ui-v3.js' admin-v2.html
           grep -q 'admin-catalog-only-v1.js' admin-v2.html
           grep -q 'Content-Security-Policy' admin-v2.html
-          grep -q "modland-customer-v18" catalog/sw.js
+          grep -q 'Vazirmatn-font-face.css' catalog/index.html
+          grep -q 'Vazirmatn-font-face.css' catalog/product.html
+          grep -q 'Vazirmatn-font-face.css' admin-v2.html
+          grep -q 'font-family:"Vazirmatn"' catalog/catalog-pro-v6.css
+          grep -q 'font-family:"Vazirmatn"' catalog/product-pro-v6.css
+          grep -q 'font-family:"Vazirmatn"' admin-pro-v1.css
+          grep -q "font-src 'self' https://cdn.jsdelivr.net" catalog/index.html
+          grep -q "font-src 'self' https://cdn.jsdelivr.net" catalog/product.html
+          grep -q "font-src 'self' https://cdn.jsdelivr.net" admin-v2.html
+          grep -q "modland-customer-v19" catalog/sw.js
+          grep -q "catalog-pro-v6.css?v=16" catalog/sw.js
+          grep -q "product-pro-v6.css?v=16" catalog/sw.js
           grep -q "product-pro-v8.js?v=18" catalog/sw.js
           grep -q "catalog-policy-v2.js?v=17" catalog/sw.js
-          grep -q "modland-admin-v14" sw.js
+          grep -q "modland-admin-v15" sw.js
+          grep -q "admin-pro-v1.css?v=5" sw.js
           grep -q "serviceWorker.register('./sw.js?v=12'" admin-pro-admin.js
           grep -q "serviceWorker.register('./sw.js?v=12'" admin-ui-v3.js
           if grep -Eq 'stock_status|stock_note|shipping_text|order_button|order_message|data-size' catalog/product-pro-v8.js; then echo 'Legacy ordering/inventory UI leaked into product runtime'; exit 1; fi
