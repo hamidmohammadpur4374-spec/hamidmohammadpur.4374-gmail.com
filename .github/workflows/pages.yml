@@ -70,7 +70,9 @@ jobs:
           grep -q "font-src 'self' https://cdn.jsdelivr.net" catalog/index.html
           grep -q "font-src 'self' https://cdn.jsdelivr.net" catalog/product.html
           grep -q "font-src 'self' https://cdn.jsdelivr.net" admin-v2.html
-          grep -q "modland-customer-v19" catalog/sw.js
+          grep -q '<div id="sync" hidden></div>' catalog/index.html
+          if grep -q 'class="sync"' catalog/index.html; then echo 'Visible sync latency badge leaked into catalog'; exit 1; fi
+          grep -q "modland-customer-v20" catalog/sw.js
           grep -q "catalog-pro-v6.css?v=16" catalog/sw.js
           grep -q "product-pro-v6.css?v=16" catalog/sw.js
           grep -q "product-pro-v8.js?v=18" catalog/sw.js
