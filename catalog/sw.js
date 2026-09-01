@@ -1,4 +1,4 @@
-const C='modland-customer-v19',IMG='modland-customer-images-v1',MAX_IMAGES=100;
+const C='modland-customer-v20',IMG='modland-customer-images-v1',MAX_IMAGES=100;
 const S=['./','./index.html','./product.html','./catalog-pro-v6.css?v=16','./catalog-vnext.css?v=15','./catalog-platform-v2.css?v=15','./catalog-pro-v9.js?v=15','./product-pro-v6.css?v=16','./product-pro-v8.js?v=18','./catalog-policy-v2.js?v=17','./manifest.webmanifest','../icon.svg','../apple-touch-icon.png'];
 async function trim(cacheName,max){const c=await caches.open(cacheName),keys=await c.keys();if(keys.length>max)await Promise.all(keys.slice(0,keys.length-max).map(k=>c.delete(k)))}
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(S)));self.skipWaiting()});
